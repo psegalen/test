@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet, Image } from 'react-native';
+import React, {useContext} from 'react';
+import { StyleSheet, Image, Alert } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
@@ -12,24 +12,50 @@ import Messages from '../Components/Messages'
 import Friends from '../Components/Friends'
 
 import Icon from '../Components/Icons'
+import { LeftMenuContext } from '../Contexts/LeftMenuContext';
+import { RightMenuContext } from '../Contexts/RightMenuContext';
+
+const LeftTabButton = () => {
+  const { setIsOpen } = useContext(LeftMenuContext);
+  return <Icon name="rr-user-circle" size={40} color="#1f4161" onPress={() => setIsOpen(true)} />;
+};
+
+const RightTabButton = () => {
+  const { setIsRightOpen } = useContext(RightMenuContext);
+  return <Icon name="rr-user-friends" size={40} color="#1f4161" onPress={() => {
+    console.log("Right")
+    setIsRightOpen(true);
+  }} />;
+};
+
+const MiddleTabButton = props => {
+  const { setIsRightOpen } = useContext(RightMenuContext);
+  const { setIsOpen } = useContext(LeftMenuContext);
+  return <Icon name={props.iconName} style={props.style || {}} size={props.size} color={props.color} onPress={() => {
+    setIsOpen(false);
+    setIsRightOpen(false);
+    props.onPress();
+  }} />;
+}
 
 const AppTabNavigator = createBottomTabNavigator(
   {
     Account: {
       screen: Account,
       navigationOptions: {
-        tabBarIcon: () => {
-          return <Icon name="rr-user-circle" size={40} color="#1f4161" onPress={() => { console.log(Account) }}/>
-        }
+        tabBarIcon: () => <LeftTabButton />
       }
     },
     Maps: {
       screen: Maps,
-      navigationOptions: {
+      navigationOptions: ({ navigation }) => ({
         tabBarIcon: () => {
-          return <Icon name="rr-globe" size={40} color="#1f4161" />
+          return <MiddleTabButton iconName="rr-globe" size={40} color="#1f4161" onPress={e => {
+            console.log("Maps");
+            navigation.navigate("Maps");
+          }} />
         }
-      }
+      })
     },
     Add: {
       screen: Add,
@@ -50,9 +76,7 @@ const AppTabNavigator = createBottomTabNavigator(
     Friends: {
       screen: Friends,
       navigationOptions: {
-        tabBarIcon: () => {
-          return <Icon name="rr-user-friends" size={40} color="#1f4161" />
-        }
+        tabBarIcon: () => <RightTabButton />
       }
     }
   },
@@ -60,8 +84,9 @@ const AppTabNavigator = createBottomTabNavigator(
     tabBarOptions: {
       inactiveBackgroundColor: '#fff',
       showLabel: false,
-      showIcon: true
-    }
+      showIcon: true,
+    },
+    initialRouteName: "Maps"
   }
 )
 
