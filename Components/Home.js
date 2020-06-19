@@ -1,15 +1,11 @@
 import React from "react";
-import { View, Text, StyleSheet, Button } from "react-native";
+import { Text, View, Button, StyleSheet } from "react-native";
 
-class Messages extends React.Component {
+class Home extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Messages</Text>
-        <Button
-          onPress={() => this.props.navigation.goBack()}
-          title="Close"
-        />
+        <Text>Home</Text>
       </View>
     );
   }
@@ -24,4 +20,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Messages;
+export default Home;
