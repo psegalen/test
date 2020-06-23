@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { StyleSheet, Image, Alert } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
 import { createAppContainer } from "react-navigation";
 import { createBottomTabNavigator } from "react-navigation-tabs";
 import { createStackNavigator } from "react-navigation-stack";
@@ -17,27 +17,24 @@ import { RightMenuContext } from "../Contexts/RightMenuContext";
 const LeftTabButton = () => {
   const { setIsOpen } = useContext(LeftMenuContext);
   return (
-    <Icon
-      name="rr-user-circle"
-      size={40}
-      color="#1f4161"
+    <TouchableOpacity
       onPress={() => setIsOpen(true)}
-    />
+      style={styles.button}
+    >
+      <Icon name="rr-user-circle" size={40} color="#1f4161" />
+    </TouchableOpacity>
   );
 };
 
 const RightTabButton = () => {
   const { setIsRightOpen } = useContext(RightMenuContext);
   return (
-    <Icon
-      name="rr-user-friends"
-      size={40}
-      color="#1f4161"
-      onPress={() => {
-        console.log("Right");
-        setIsRightOpen(true);
-      }}
-    />
+    <TouchableOpacity
+      onPress={() => setIsRightOpen(true)}
+      style={styles.button}
+    >
+      <Icon name="rr-user-friends" size={40} color="#1f4161" />
+    </TouchableOpacity>
   );
 };
 
@@ -45,17 +42,21 @@ const MiddleTabButton = (props) => {
   const { setIsRightOpen } = useContext(RightMenuContext);
   const { setIsOpen } = useContext(LeftMenuContext);
   return (
-    <Icon
-      name={props.iconName}
-      style={props.style || {}}
-      size={props.size}
-      color={props.color}
+    <TouchableOpacity
       onPress={() => {
         setIsOpen(false);
         setIsRightOpen(false);
         props.onPress();
       }}
-    />
+      style={styles.button}
+    >
+      <Icon
+        name={props.iconName}
+        style={props.style || {}}
+        size={props.size}
+        color={props.color}
+      />
+    </TouchableOpacity>
   );
 };
 
@@ -64,13 +65,13 @@ const AppTabNavigator = createBottomTabNavigator(
     Account: {
       screen: Home,
       navigationOptions: {
-        tabBarIcon: () => <LeftTabButton />,
+        tabBarButtonComponent: () => <LeftTabButton />,
       },
     },
     TabMaps: {
       screen: Maps,
       navigationOptions: ({ navigation }) => ({
-        tabBarIcon: () => {
+        tabBarButtonComponent: () => {
           return (
             <MiddleTabButton
               iconName="rr-globe"
@@ -85,7 +86,7 @@ const AppTabNavigator = createBottomTabNavigator(
     TabAdd: {
       screen: Add,
       navigationOptions: ({ navigation }) => ({
-        tabBarIcon: () => {
+        tabBarButtonComponent: () => {
           return (
             <MiddleTabButton
               iconName="rr-plus-circle"
@@ -101,7 +102,7 @@ const AppTabNavigator = createBottomTabNavigator(
     TabMessages: {
       screen: Messages,
       navigationOptions: ({ navigation }) => ({
-        tabBarIcon: () => {
+        tabBarButtonComponent: () => {
           return (
             <MiddleTabButton
               iconName="rr-mail"
@@ -116,7 +117,7 @@ const AppTabNavigator = createBottomTabNavigator(
     Friends: {
       screen: Friends,
       navigationOptions: {
-        tabBarIcon: () => <RightTabButton />,
+        tabBarButtonComponent: () => <RightTabButton />,
       },
     },
   },
@@ -158,6 +159,10 @@ const styles = StyleSheet.create({
   },
   add: {
     marginTop: -25,
+  },
+  button: {
+    flex: 1,
+    alignItems: "center",
   },
 });
 
