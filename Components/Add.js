@@ -7,7 +7,11 @@ class Add extends React.Component {
       <View style={styles.container}>
         <Text>Add</Text>
         <Button
-          onPress={() => this.props.navigation.goBack()}
+          onPress={() => this.props.navigation.navigate("AddDetails")}
+          title="Go to details"
+        />
+        <Button
+          onPress={() => this.props.navigation.goBack(null)}
           title="Close"
         />
       </View>

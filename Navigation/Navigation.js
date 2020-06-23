@@ -13,6 +13,7 @@ import Friends from "../Components/Friends";
 import Icon from "../Components/Icons";
 import { LeftMenuContext } from "../Contexts/LeftMenuContext";
 import { RightMenuContext } from "../Contexts/RightMenuContext";
+import AddDetails from "../Components/AddDetails";
 
 const LeftTabButton = () => {
   const { setIsOpen } = useContext(LeftMenuContext);
@@ -131,13 +132,27 @@ const AppTabNavigator = createBottomTabNavigator(
   }
 );
 
+const AddStack = createStackNavigator(
+  {
+    AddHome: {
+      screen: Add,
+    },
+    AddDetails: {
+      screen: AddDetails,
+    },
+  },
+  {
+    headerMode: "none",
+  }
+);
+
 const MainStack = createStackNavigator(
   {
     Home: {
       screen: AppTabNavigator,
     },
     Add: {
-      screen: Add,
+      screen: AddStack,
     },
     Maps: {
       screen: Maps,
