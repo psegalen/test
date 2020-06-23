@@ -15,8 +15,13 @@ import { LeftMenuContext } from "../Contexts/LeftMenuContext";
 import { RightMenuContext } from "../Contexts/RightMenuContext";
 import AddDetails from "../Components/AddDetails";
 
-const LeftTabButton = () => {
-  const { setIsOpen } = useContext(LeftMenuContext);
+const LeftTabButton = (props) => {
+  const { setIsOpen, navigation, setNavigation } = useContext(
+    LeftMenuContext
+  );
+  if (!navigation) {
+    setNavigation(props.navigation);
+  }
   return (
     <TouchableOpacity
       onPress={() => setIsOpen(true)}
@@ -65,9 +70,11 @@ const AppTabNavigator = createBottomTabNavigator(
   {
     Account: {
       screen: Home,
-      navigationOptions: {
-        tabBarButtonComponent: () => <LeftTabButton />,
-      },
+      navigationOptions: ({ navigation }) => ({
+        tabBarButtonComponent: () => (
+          <LeftTabButton navigation={navigation} />
+        ),
+      }),
     },
     TabMaps: {
       screen: Maps,
