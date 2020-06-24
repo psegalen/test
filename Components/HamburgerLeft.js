@@ -1,9 +1,10 @@
 import React, { useContext } from "react";
 import { Text, View, Button, StyleSheet } from "react-native";
+import { connect } from "react-redux";
 import { LeftMenuContext } from "../Contexts/LeftMenuContext";
 
-const Left = () => {
-  const { setIsOpen, navigation } = useContext(LeftMenuContext);
+const Left = (props) => {
+  const { setIsOpen } = useContext(LeftMenuContext);
   return (
     <View style={styles.panel}>
       <Text style={styles.text}>Left Panel</Text>
@@ -11,7 +12,7 @@ const Left = () => {
         title="Open Messages"
         onPress={() => {
           setIsOpen(false);
-          navigation.navigate("Messages");
+          props.nav.navigate("Messages");
         }}
       ></Button>
     </View>
@@ -30,4 +31,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Left;
+const mapStateToProps = (state) => ({
+  nav: state.nav,
+});
+
+export default connect(mapStateToProps)(Left);

@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { Provider } from "react-redux";
 import Navigation from "./Navigation/Navigation";
 import SideMenu from "react-native-side-menu";
 import Left from "./Components/HamburgerLeft";
@@ -11,6 +12,7 @@ import {
   RightMenuContext,
   RightMenuProvider,
 } from "./Contexts/RightMenuContext";
+import store from "./Redux/store";
 
 const AppRoot = () => {
   const { isOpen, setIsOpen } = useContext(LeftMenuContext);
@@ -41,11 +43,13 @@ const AppRoot = () => {
 export default class App extends React.Component {
   render() {
     return (
-      <RightMenuProvider>
-        <LeftMenuProvider>
-          <AppRoot />
-        </LeftMenuProvider>
-      </RightMenuProvider>
+      <Provider store={store}>
+        <RightMenuProvider>
+          <LeftMenuProvider>
+            <AppRoot />
+          </LeftMenuProvider>
+        </RightMenuProvider>
+      </Provider>
     );
   }
 }

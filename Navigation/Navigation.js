@@ -3,6 +3,7 @@ import { StyleSheet, TouchableOpacity } from "react-native";
 import { createAppContainer } from "react-navigation";
 import { createBottomTabNavigator } from "react-navigation-tabs";
 import { createStackNavigator } from "react-navigation-stack";
+import { connect } from "react-redux";
 
 import Home from "../Components/Home";
 import Maps from "../Components/Maps";
@@ -14,13 +15,12 @@ import Icon from "../Components/Icons";
 import { LeftMenuContext } from "../Contexts/LeftMenuContext";
 import { RightMenuContext } from "../Contexts/RightMenuContext";
 import AddDetails from "../Components/AddDetails";
+import { navActions } from "../Redux/navReducer";
 
 const LeftTabButton = (props) => {
-  const { setIsOpen, navigation, setNavigation } = useContext(
-    LeftMenuContext
-  );
-  if (!navigation) {
-    setNavigation(props.navigation);
+  const { setIsOpen } = useContext(LeftMenuContext);
+  if (!props.nav) {
+    props.setNav(props.navigation);
   }
   return (
     <TouchableOpacity
@@ -31,6 +31,18 @@ const LeftTabButton = (props) => {
     </TouchableOpacity>
   );
 };
+
+const mapDispatchToLeftTabProps = (dispatch) => ({
+  setNav: (nav) => dispatch({ type: navActions.STORE_NAV, nav }),
+});
+const mapStateToLeftTabProps = (state) => ({
+  nav: state.nav,
+});
+
+const ConnectedLeftTabButton = connect(
+  mapStateToLeftTabProps,
+  mapDispatchToLeftTabProps
+)(LeftTabButton);
 
 const RightTabButton = () => {
   const { setIsRightOpen } = useContext(RightMenuContext);
@@ -72,7 +84,7 @@ const AppTabNavigator = createBottomTabNavigator(
       screen: Home,
       navigationOptions: ({ navigation }) => ({
         tabBarButtonComponent: () => (
-          <LeftTabButton navigation={navigation} />
+          <ConnectedLeftTabButton navigation={navigation} />
         ),
       }),
     },
